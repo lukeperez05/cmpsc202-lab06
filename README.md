@@ -59,7 +59,7 @@ Rather than using recursion, we can build up a solution iteratively. This is kno
 - Iterate through each amount from `1` to `amount`, and for each `coin`, update `dp[i] = min(dp[i], dp[i - coin] + 1)`.
 ```
 def coin_change_dp(coins, amount):
-    dp = [0] + [float('inf')] * amount
+    dp = [0] + [float('i')] * amount
     for i in range(1, amount + 1):
         for coin in coins:
             if coin <= i:
