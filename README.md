@@ -9,7 +9,18 @@ You may work in small groups or individually. If you work in pairs, please submi
 ## Phase 1: The Naive Recursive Approach
 
 **Task**: Write a Python function `coin_change_recursive(coins, amount)`, then test it on a small amount (e.g., `amount = 11` with `coins = [1, 2, 5]`). It should run in less than a second.
+```
+def coin_change_recursive(coins, amount):
+    if amount == 0:
+        return 0
+    opt = []
+    for coin in coins:
+        if coin <= amount:
+            opt.append(1 + coin_change_recursive(coins, amount-coin))
+    return min(opt)
 
+print("min coins:", coin_change_recursive([1, 2, 5], 11))
+```
 
 ## Phase 2: Top-Down DP (Memoization)
 
@@ -21,6 +32,21 @@ Recall that the naive recursive approach might solve the same subproblems multip
 - If the amount is 0, return 0 (base case).
 - If the amount is already in `memo`, return the stored value.
 - Otherwise, iterate through each coin and recursively compute the minimum number of coins needed for the remaining amount (i.e., `amount - coin`). Store the result in `memo` before returning it.
+```
+def coin_change_memoized(coins, amount, memo):
+    if amount == 0:
+        return 0
+    if amount in memo:
+        return memo[amount]
+    opt = []
+    for coin in coins:
+        if coin <= amount:
+            opt.append(1 + coin_change_memoized(coins, amount-coin, memo))
+    memo[amount] = min(opt)
+    return memo[amount]
+
+print("min coins:", coin_change_memoized([1, 2, 5], 11, {}))
+```
 
 ## Phase 3: Bottom-Up DP (Tabulation)
 
@@ -31,6 +57,17 @@ Rather than using recursion, we can build up a solution iteratively. This is kno
 **Logic**: 
 - Initialize a list `dp`. Set `dp[0] = 0`. 
 - Iterate through each amount from `1` to `amount`, and for each `coin`, update `dp[i] = min(dp[i], dp[i - coin] + 1)`.
+```
+def coin_change_dp(coins, amount):
+    dp = [0] + [float('inf')] * amount
+    for i in range(1, amount + 1):
+        for coin in coins:
+            if coin <= i:
+                dp[i] = min(dp[i], dp[i - coin] + 1)
+    return dp[amount]
+
+print("min coins:", coin_change_dp([1, 2, 5], 11))
+```
 
 ## Phase 4: Empirical Comparison
 
